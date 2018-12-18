@@ -1,7 +1,3 @@
-# Real-time-image-capture-of-cancer-cells
-An embedded system for microscope-based, real-time image capture of cancer cells. 
-
-
 # Capstone Project Proposal:
 An embedded system for microscope-based, real-time image capture of cancer cells
 
