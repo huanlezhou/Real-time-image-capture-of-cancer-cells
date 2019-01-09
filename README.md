@@ -5,7 +5,7 @@ Every Saturday  1:30 PM in the Fourth Avenue Building basement.
 
 
 # Next Meeting
-Saturday, January 12th, 2019.
+Saturday, January 12th, 2019. Usual time and location.
 
 # Tasks for next meeting
 1. Completing a Project Design Specifications (PDS) document that will need to be signed by Thomas
