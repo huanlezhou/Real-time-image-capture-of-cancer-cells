@@ -1,4 +1,4 @@
-# Saturday, January 5th, 2019
+# Saturday, January 12th, 2019
 
 
 ### Group Attendees
