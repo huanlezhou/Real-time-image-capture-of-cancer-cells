@@ -8,9 +8,13 @@
 4. Huanle Zhou
 
 ### Summary
-The primary focus of today was the PDS. This version of the PDS is based on the current understanding of the project.
-Writing the PDS allows us to question our understanding of the problem statement and our proposed solution. 
-This is the first version of the PDS and is subject to change.
+The primary focus of the meeting was developing a Design Specifications Document (DSD).
+Writing the DSD forces us to clearly express our understanding of the project. It should
+clear up any misunderstandings about the requirements of the project. We worked on a DSD
+but did not finish.
 
 ### Issues
-No issue
+None, except the DSD is not finished yet.
+
+### Future goals
+Finish the DSD.
