@@ -81,13 +81,13 @@ project listed in the subsequent enumerations.
 3.	__Dated progress reports__ listing accomplishments, issues, and future goals after
 meetings. These should include specific project details, issues, and goals.
 
-4.	Providing an updated copy of this __‘Design Specifications Document’ (DSD)__.
+4.	Providing an updated copy of the __Design Specifications Document (DSD)__.
 
 5.	__If requested__ by the sponsor, providing documentation that will ease the use 
 or understanding of the developed software, e.g, __tutorials__, __manuals__, etc. 
 
 # Project Status & Records
-A live Gantt chart of the project can be found at this [GitHub Wiki](https://github.com/huanlezhou/Real-time-image-capture-of-cancer-cells).
+A live Gantt chart reflecting the status of the project can be found at this [GitHub Wiki](https://github.com/huanlezhou/Real-time-image-capture-of-cancer-cells).
 
-Progress reports recording accomplishments, issues, and future goals produced after the team meetings
+Progress reports written after the team meetings recording accomplishments, issues, and future goals 
 can be found under the [__Progress Reports__](https://github.com/huanlezhou/Real-time-image-capture-of-cancer-cells/tree/master/Progress%20Reports) directory of this GitHub repository.
