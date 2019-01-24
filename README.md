@@ -52,7 +52,7 @@ OS: Windows XP professional service pack 3;  x32 bit version.
 
 2.	__Microscope__: Zeiss AxioImager M2 upright.
 
-3.	__XYZ stage__: Marshauser Wetxiar GmbH & Co KG. Type: EK 75x50 mot. Tango 
+3.	__XY stage__: Marshauser Wetxiar GmbH & Co KG. Type: EK 75x50 mot. Tango 
 CZ EMV
 
 4.	__Camera__: Photometric CoolSNAP ES2.
