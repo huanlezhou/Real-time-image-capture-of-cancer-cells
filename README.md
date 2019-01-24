@@ -87,7 +87,7 @@ meetings. These should include specific project details, issues, and goals.
 or understanding of the developed software, e.g, __tutorials__, __manuals__, etc. 
 
 # Project Progress & Status
-A live Gantt chart of the project can be found at this [GitHub Wiki](https://hi.com).
+A live Gantt chart of the project can be found at this [GitHub Wiki](https://github.com/huanlezhou/Real-time-image-capture-of-cancer-cells).
 
 Progress reports recording accomplishments and issues at the conclusion of team meetings
 can be found under the [__Progress Reports__](https://github.com/huanlezhou/Real-time-image-capture-of-cancer-cells/tree/master/Progress%20Reports) directory of this GitHub repository.
