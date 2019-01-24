@@ -45,9 +45,9 @@ significantly increase the image acquisition and filtering speed.
 
 # Requirements
 ### Hardware Requirements
-The system should use the following devices in CytoImage DX’s laboratory: 
+The system should make use of the following devices in CytoImage DX’s laboratory: 
 
-1.	__Computer__: Dell precision T3500, with Xeon R CPU 3530 @2.8 GZ, 2 GB RAM. 
+1.	__Computer__: Dell precision T3500, with Xeon R CPU 3530 @2.8 GHz, 2 GB RAM. 
 OS: Windows XP professional service pack 3;  x32 bit version.
 
 2.	__Microscope__: Zeiss AxioImager M2 upright.
