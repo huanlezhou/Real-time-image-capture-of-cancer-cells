@@ -89,5 +89,5 @@ or understanding of the developed software, e.g, __tutorials__, __manuals__, etc
 # Project Status & Records
 A live Gantt chart reflecting the status of the project can be found [here](https://prod.teamgantt.com/gantt/schedule/?ids=1432769&public_keys=M1SEDd8Q6NcE&zoom=d100&font_size=12&estimated_hours=0&assigned_resources=1&percent_complete=1&documents=0&comments=1&col_width=355&hide_header_tabs=0&menu_view=1&resource_filter=1&name_in_bar=0&name_next_to_bar=1&resource_names=1#user=&company=&custom=&date_filter=&hide_completed=false&color_filter=).
 
-Progress reports, written after the team meetings, recording accomplishments, issues, and future goals 
-can be found under the progress reports directory of this GitHub repository, found [here](https://github.com/huanlezhou/Real-time-image-capture-of-cancer-cells/tree/master/Progress%20Reports)
+Weekly progress reports, recording accomplishments, issues, and future goals 
+are located in the progress reports directory, of this GitHub repository, found [here](https://github.com/huanlezhou/Real-time-image-capture-of-cancer-cells/tree/master/Progress%20Reports)
