@@ -45,7 +45,7 @@ significantly increase the image acquisition and filtering speed.
 
 # Requirements
 ### Hardware Requirements
-The system should make use of the following devices in CytoImage DX’s laboratory: 
+The system should operate using the following devices in CytoImage DX’s laboratory: 
 
 1.	__Computer__: Dell precision T3500, with Xeon R CPU 3530 @2.8 GHz, 2 GB RAM. 
 OS: Windows XP professional service pack 3;  x32 bit version.
@@ -71,7 +71,7 @@ preset user established intensity ratio in real-time.
 
 4.	Benchmarking the speed and accuracy of the integrated working prototype.
 
-### Documentation Requirements
+#### Documentation Requirements
 1.	Creation of an __organized online archive(s)__, e.g. a GitHub repository, that is 
 easily accessible by the sponsor for viewing ALL things pertaining to the 
 project listed in the subsequent enumerations.
@@ -86,7 +86,7 @@ meetings. These should include specific project details, issues, and goals.
 5.	__If requested__ by the sponsor, providing documentation that will ease the use 
 or understanding of the developed software, e.g, __tutorials__, __manuals__, etc. 
 
-# Project Progress & Status
+# Project Status & Records
 A live Gantt chart of the project can be found at this [GitHub Wiki](https://github.com/huanlezhou/Real-time-image-capture-of-cancer-cells).
 
 Progress reports recording accomplishments and issues at the conclusion of team meetings
