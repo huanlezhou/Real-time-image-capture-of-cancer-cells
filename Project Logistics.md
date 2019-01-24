@@ -1,7 +1,7 @@
 # CytoImage DX Lab Location
 OHSU-Waterfront campus, Robertson Life Sciences Building (RLSB), 4th floor, (4N097)
 
-# Contact Information
+# Sponsor Representative Contact Information
 Dr. Thomas,
 
 Cell: 503-418-9343
