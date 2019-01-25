@@ -15,7 +15,7 @@ Tuesdays, at 12:30PM in CytoImage DX laboratory.
 
 Fridays, at 2:30 PM in the Circuit Lounge on PSU campus.
 
-[comment]: <> (# Microscope:) 
+// # Microscope: 
 Zeiss AxioImager M2 upright. 
 
 Go to the datasheet by clicking [here](https://www.zeiss.com/microscopy/us/products/light-microscopes/axio-imager-2-for-biology.html).
