@@ -1,0 +1,35 @@
+# Friday, January ,25th 2019
+
+
+### Group Attendees
+1. Angeline Alfred
+2. Timothy Koba
+3. Ashten Bontrager
+4. Huanle Zhou
+
+### Summary
+Added hardware and software requirements headers in Gantt Chart. 
+Improved details on each main header on Gantt Chart.
+Summarized a high-level algorithm for controlling microscope and image processing software. 
+Research on available resources such as pre-existing library and functions to support our program development in ICY.  
+Decided on using Java instead of Python for programing in ICY.
+
+
+### Issues
+Data processing:
+Team is having trouble to come off with an algorithm to determine signal to noise ratio. 
+
+
+###Need clarifications on:
+Background detection (Signal to noise ratio)
+Cell location/size/population 
+Color code for different layers on the images
+
+
+###Request 
+Image file reference about the cell data analysis from Thomas. 
+
+
+###Goal for next week
+Run test script, supplied by ICY, to test control of scope. 
+What type of image data file does the software save.
