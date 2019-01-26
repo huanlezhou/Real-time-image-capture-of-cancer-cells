@@ -91,3 +91,4 @@ A live Gantt chart reflecting the status of the project can be found [here](http
 
 Weekly progress reports, recording accomplishments, issues, and future goals 
 are located in the progress reports directory, of this GitHub repository, found [here](https://github.com/huanlezhou/Real-time-image-capture-of-cancer-cells/tree/master/Progress%20Reports)
+ 
