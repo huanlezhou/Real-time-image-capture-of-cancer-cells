@@ -44,7 +44,7 @@ significantly increase the image acquisition and filtering speed.
 
 
 # Requirements
-#### Hardware Requirements
+### Hardware Requirements
 The system should operate using the following devices in CytoImage DX’s laboratory: 
 
 1.	__Computer__: Dell precision T3500, with Xeon R CPU 3530 @2.8 GHz, 2 GB RAM. 
@@ -57,7 +57,7 @@ CZ EMV
 
 4.	__Camera__: Photometric CoolSNAP ES2.
 
-#### Software Requirements
+### Software Requirements
 1. Use of	__open-source automated microscopy software__ (e.g. micro-manager)
 to perform rapid microscope-based scanning through blood samples.
 
@@ -71,7 +71,7 @@ preset user established intensity ratio in real-time.
 
 4.	Benchmarking the speed and accuracy of the integrated working prototype.
 
-#### Documentation Requirements
+### Documentation Requirements
 1.	Creation of an __organized online archive(s)__, e.g. a GitHub repository, that is 
 easily accessible by the sponsor for viewing ALL things pertaining to the 
 project listed in the subsequent enumerations.
