@@ -1,0 +1,11 @@
+There are 4 channels in each image.
+Ch1= DIC (bright field)
+Ch2= CD34  (channel to test whether there is singal, ie postive cells)
+Ch3= PP
+Ch4= Nucleus  (use for detecting al lthe cells)
+
+Stack images has 4 channels and 5 slices/channel in 2-4, Ch1 has only one slice
+Projections: 4 channels, 1 slice/channel (5 slices maximum projected to one slice)
+
+Cell detection file  (overlay): example of cells detected based on the nuclear channel, and overlaid on the DIC channel
+
