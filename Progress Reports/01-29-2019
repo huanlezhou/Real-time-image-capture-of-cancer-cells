@@ -1,0 +1,24 @@
+# Tuesday 1-29-2019
+
+### Group Attendees
+1. Angeline Alfred
+2. Timothy Koba 
+3. Huanle Zhou
+
+### Accomplishments
+• Learned more info about Data Analysis from Thomas. 
+• Determined the data/file type of an image snapped by the camera. 
+• Added configuration groups on Micro-Manager to control the microscope.
+• Tested some script.
+
+
+### Issues (In prograss)
+• The current process (script) on saving an image requires manually select file location for every single image.  
+
+
+### Goals for next week
+ Run more script to:
+• Generate images with specified width, height, number of channels and type.
+• Save images in a specified file location only require once for multiple images.
+• Determine the number of images need to generate basic upon on the image focusing.
+
