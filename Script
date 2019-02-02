@@ -16,6 +16,7 @@ if (file == null) throw "No file selected"
  // Check if the file has an extension. Add .png if not.
 if (FileUtil.getFileExtension(file.getPath(), false) == "")
 	file = new File(file.getAbsolutePath() + ".png")
-
-Saver.save(seq, file, true)
+	
 // Save seq into f. Overwrite is true.
+Saver.save(seq, file, true)
+
