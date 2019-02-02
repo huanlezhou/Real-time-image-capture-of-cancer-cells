@@ -1,0 +1,21 @@
+### Save a captured image to PC
+
+importClass(Packages.plugins.tprovoost.scripteditor.uitools.filedialogs.FileDialog)
+importClass(Packages.icy.file.Saver)
+importClass(Packages.icy.file.FileUtil)
+importClass(Packages.java.io.File)
+
+// get the current sequence and raise an exception if none
+seq = getSequence()
+if (seq == null) throw "Please open a sequence first"
+
+// Open a File Dialog for saving, and test if selected one.
+file = FileDialog.save()
+if (file == null) throw "No file selected"
+
+ // Check if the file has an extension. Add .png if not.
+if (FileUtil.getFileExtension(file.getPath(), false) == "")
+	file = new File(file.getAbsolutePath() + ".png")
+
+Saver.save(seq, file, true)
+// Save seq into f. Overwrite is true.
