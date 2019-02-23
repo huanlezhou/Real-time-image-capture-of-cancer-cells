@@ -93,11 +93,11 @@ public class UserInterface extends EzPlug implements EzStoppable {
 	protected void initialize() {
 		// TODO Auto-generated method stub
 		EzVarDouble signal_noise_ratio = new EzVarDouble("S/N");
-		EzVarDouble top_y_position = new EzVarDouble("Top Edge of Sample");
-		EzVarDouble bottom_y_position = new EzVarDouble("Bottom Edge of Sample");
-		EzVarDouble left_x_position = new EzVarDouble("Left Edge of Sample");
-		EzVarDouble right_x_position = new EzVarDouble("Right Edge of Sample");
-		EzVarDouble z_focus = new EzVarDouble("Sample in Focus");
+		//EzVarDouble top_y_position = new EzVarDouble("Top Edge of Sample");
+		//EzVarDouble bottom_y_position = new EzVarDouble("Bottom Edge of Sample");
+		//EzVarDouble left_x_position = new EzVarDouble("Left Edge of Sample");
+		//EzVarDouble right_x_position = new EzVarDouble("Right Edge of Sample");
+		//EzVarDouble z_focus = new EzVarDouble("Sample in Focus");
 		EzVarFolder save_location = new EzVarFolder("Desired File Directory", null);
 		
 		EzLabel signal_noise_ins = new EzLabel("Please enter the S/R in the box above.");
