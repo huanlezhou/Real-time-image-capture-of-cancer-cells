@@ -2,29 +2,32 @@ package plugins.ashten2.userinterface;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
-import icy.gui.dialog.MessageDialog;
-import icy.plugin.abstract_.PluginActionable;
+import javax.swing.JFileChooser;
+
 import plugins.adufour.ezplug.EzButton;
 import plugins.adufour.ezplug.EzGroup;
 import plugins.adufour.ezplug.EzLabel;
 import plugins.adufour.ezplug.EzPlug;
 import plugins.adufour.ezplug.EzStoppable;
-import plugins.adufour.ezplug.EzVar;
 import plugins.adufour.ezplug.EzVarDouble;
-import plugins.adufour.ezplug.EzVarFolder;
 import plugins.tprovoost.Microscopy.MicroManager.tools.StageMover;
 
-public class UserInterface extends EzPlug implements EzStoppable {
+public class Microscopy2 extends EzPlug implements EzStoppable {
 	
 	boolean stopFlag;
+	
+	double captured_left_x, captured_right_x, captured_top_y, captured_bottom_y, captured_z_focus;
+	
+	File save_location;
+	JFileChooser fc;
 	
 	ActionListener get_x_left = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
-				double captured_left_x = StageMover.getX();
-				System.out.println("The left most x position is " + captured_left_x);
+				captured_left_x = StageMover.getX();
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -37,8 +40,7 @@ public class UserInterface extends EzPlug implements EzStoppable {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
-				double captured_right_x = StageMover.getX();
-				System.out.println("The right most x position is " + captured_right_x);
+				captured_right_x = StageMover.getX();
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -51,8 +53,7 @@ public class UserInterface extends EzPlug implements EzStoppable {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
-				double captured_top_y = StageMover.getY();
-				System.out.println("The top most y position is " + captured_top_y);
+				captured_top_y = StageMover.getY();
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -65,8 +66,7 @@ public class UserInterface extends EzPlug implements EzStoppable {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
-				double captured_bottom_y = StageMover.getY();
-				System.out.println("The bottom most y position is " + captured_bottom_y);
+				captured_bottom_y = StageMover.getY();
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -79,62 +79,73 @@ public class UserInterface extends EzPlug implements EzStoppable {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
-				double captured_z_focus = StageMover.getZ();
-				System.out.println("The focus level is " + captured_z_focus);
+				captured_z_focus = StageMover.getZ();
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
 	};
-	EzButton Z_focus = new EzButton("Z Focus", get_z_focus);
+	EzButton Z_focus = new EzButton("Focus", get_z_focus);
 	
+	ActionListener save_directory = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {
+				fc = new JFileChooser();
+				fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				fc.showSaveDialog(null);
+				save_location = fc.getSelectedFile();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	};
+	EzButton directory = new EzButton("Directory", save_directory);
 	@Override
 	protected void initialize() {
 		// TODO Auto-generated method stub
 		EzVarDouble signal_noise_ratio = new EzVarDouble("S/N");
-		//EzVarDouble top_y_position = new EzVarDouble("Top Edge of Sample");
-		//EzVarDouble bottom_y_position = new EzVarDouble("Bottom Edge of Sample");
-		//EzVarDouble left_x_position = new EzVarDouble("Left Edge of Sample");
-		//EzVarDouble right_x_position = new EzVarDouble("Right Edge of Sample");
-		//EzVarDouble z_focus = new EzVarDouble("Sample in Focus");
-		EzVarFolder save_location = new EzVarFolder("Desired File Directory", null);
+		/*EzVarDouble top_y_position = new EzVarDouble("Top Edge of Sample");
+		EzVarDouble bottom_y_position = new EzVarDouble("Bottom Edge of Sample");
+		EzVarDouble left_x_position = new EzVarDouble("Left Edge of Sample");
+		EzVarDouble right_x_position = new EzVarDouble("Right Edge of Sample");
+		EzVarDouble z_focus = new EzVarDouble("Sample in Focus");
+		*///EzVarFolder save_location = new EzVarFolder("Desired File Directory", null);
 		
-		EzLabel signal_noise_ins = new EzLabel("Please enter the S/R in the box above.");
-		EzGroup SNR = new EzGroup("Signal to Noise Ratio", signal_noise_ratio, signal_noise_ins);
+		EzLabel signal_noise_ins = new EzLabel("Please enter the S/R in the box below.");
+		EzGroup SNR = new EzGroup("Signal to Noise Ratio", signal_noise_ins, signal_noise_ratio);
 		super.addEzComponent(SNR);
-		/*
-		EzGroup y_location = new EzGroup("Y Location", top_y_position, bottom_y_position);
-		super.addEzComponent(y_location);
 		
-		EzGroup x_location = new EzGroup("X Location", left_x_position, right_x_position);
-		super.addEzComponent(x_location);
+		EzGroup Focus = new EzGroup("Z Focus", new EzLabel("Adjust the focus until the sample is in focus, \nthen click the focus button "), Z_focus);
+		super.addEzComponent(Focus);
 		
-		super.addEzComponent(z_focus);
-		*/
+		EzGroup X_Location = new EzGroup("X Location", new EzLabel("Move the sample to each, X, location \nand click the coresponding button"), Left_X, Right_X);
+		super.addEzComponent(X_Location);
 		
-		addEzComponent(new EzLabel("Press Left X button after putting the left most sample in view"));
-		addEzComponent(Left_X);
+		EzGroup Y_Location = new EzGroup("Y Location", new EzLabel("Move the sample to each, Y, location \nand click the coresponding button"), Top_Y, Bottom_Y);
+		super.addEzComponent(Y_Location);
 		
-		addEzComponent(new EzLabel("Press Right X button after putting the right most sample in view"));
-		addEzComponent(Right_X);
+		EzGroup user_directory = new EzGroup("Directory Selection", new EzLabel("Click the Directory button, \nto select where you would like to save your images."), directory);
+		super.addEzComponent(user_directory);
 		
-		addEzComponent(new EzLabel("Press Top Y button after putting the top most sample in view"));
-		addEzComponent(Top_Y);
-		
-		addEzComponent(new EzLabel("Press Btm Y button after putting the bottom most sample in view"));
-		addEzComponent(Bottom_Y);
-		
-		addEzComponent(new EzLabel("Press Z Focuse button after bringing the cells into focus"));
-		addEzComponent(Z_focus);
-		
-		super.addEzComponent(save_location);
+		addEzComponent(new EzLabel("Please press play, afetr entering setup information above."));
 	}
 	
 	@Override
 	protected void execute() {
 		// TODO Auto-generated method stub
 	//	System.out.println("The bottom most y position is " +  top_y_position);
+		
+		System.out.println("The left most x position is " + captured_left_x);
+		System.out.println("The right most x position is " + captured_right_x);
+		System.out.println("The top most y position is " + captured_top_y);
+		System.out.println("The bottom most y position is " + captured_bottom_y);
+		System.out.println("The focus level is " + captured_z_focus);
+		System.out.println("Your save directory is " + save_location);
+		
+		
 	}
 	
 	@Override
