@@ -218,6 +218,8 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 		
 		System.out.println(signal_noise_ratio);
 		
+		//CellDetector;
+		
 		
 		do {
 			try {
@@ -232,8 +234,8 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			next_location(x_limit(x_location), y_limit(y_location));
-		} while (x_location != captured_right_x && y_location != captured_bottom_y);
+			next_location(x_limit(x_location), y_limit(y_location), x_location, y_location);
+		} while (x_location <= captured_right_x && y_location <= captured_bottom_y);
 		
 		
 	}
@@ -265,20 +267,20 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 			return true;
 	}
 	
-	public void next_location(boolean x_limit, boolean y_limit) {
+	public void next_location(boolean x_limit, boolean y_limit, double x_location, double y_locatoin) {
 		if (x_limit == true)
 			if (y_limit == true)
 				JOptionPane.showMessageDialog(null, "The end of the slide has been reached.");
 			else
 				try {
-					StageMover.moveXYRelative(captured_left_x, 5);
+					StageMover.moveXYRelative((captured_left_x - x_location), 5000);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		else
 			try {
-				StageMover.moveXYRelative(5, 0);
+				StageMover.moveXYRelative(5000, 0);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
