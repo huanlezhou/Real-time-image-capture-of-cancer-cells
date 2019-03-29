@@ -11,9 +11,9 @@ Email: thomas@cytoimagedx.com
 _Irregular meetings in the laboratory should be arranged with Thomas beforehand._ 
 
 # Team Meeting Schedule
-Tuesdays, at 12:30PM in CytoImage DX laboratory.
+Wednesdays, at 11:30AM @ PSU.
 
-Fridays, at 2:30 PM in the Circuit Lounge on PSU campus.
+Fridays, at 2:30 PM in the CytoImage DX Lab.
 
 <!---
 # Microscope: 
