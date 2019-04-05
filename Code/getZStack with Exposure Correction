@@ -11,7 +11,7 @@
 		//importClass(Packages.icy.file.Saver)
 		//importClass(Packages.java.io.File)
 		//importClass(Packages.java.util.concurrent.TimeUnit)
-
+		double exp = 500.0;
 		double initial_z_position = 0.0;
 		try {
 			initial_z_position = StageMover.getZ();
