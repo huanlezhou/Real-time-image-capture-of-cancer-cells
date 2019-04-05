@@ -5,64 +5,15 @@ importClass(Packages.icy.sequence.Sequence)
 importClass(Packages.icy.sequence.SequenceUtil)
 
 
-// get icy to work with micromanager envierment
-        test = MicroManager.getCore()
-        studio = MicroManager.getMMStudio()
-
-//initalize the z-stack position
-  function inialiazeImagePoition(){
-
-        zStackPosition = 0
-        StageMover.moveXYAbsolute(x, x)
-}
-
-//case #1 take and save images for DIC Channel
-  function saveImagesForChannel_DIC(){	
-           
-      //get current sequence
-        sequence = new Sequence()
-        if (sequence == null)
-        Println ("Please open a sequence first")
-
-        MicroManager.getCore().setProerty("ZeissReflectorTurret","State","x")
-        saveImages()
-        Println("Done: DIC Channel images saved")
-}
-
-//case #2 take and save images for Nuclear Channel
-  function saveImagesForChannel_Nuclear(){
-	
-      //move to the next channel that we are instered 
-        SequenceUtil.removeChannel(sequence, x)
-	MicroManager.getCore().setProerty("ZeissReflectorTurret","State","x")
-        saveImages()
-        Println("Done: Nuclear Channel images saved")
-}
-
-//case #3 take and save images for Cancer channel     
-  function saveImagesForChannel_CancerCell(){
-
-      //move to the next channel that we are instered 
-        SequenceUtil.removeChannel(sequence, x)
-        MicroManager.getCore().setProerty("ZeissReflectorTurret","State","x")
-	saveImages()
-        Println("Done: CancerCell Channel images saved")
-}
-
-//save the images to a user defined file loaction
-  function saveImages(){
-
-       // save a image
-       image = MicroManager.snapImage()
-
-       filePath = "C:/Documents and Settings/asi/Desktop/Team4_Capstone/ThreeChannelImages"
-       file = new File(filePath + "/Imagex.tif")
-       Saver.save(sequence, file)
-}
-
 ////////////////////////////////////////////////
 
 Sequence result = new Sequence(); // Create the resulting sequence
+
+//set exposure
+for(t = 0; t < 20; t++)
+{
+ MicroManager.setExposure(10 + (t * 5)) 
+ }
 // DIC
 MicroManager.getCore().setProerty("ZeissReflectorTurret","State","x") // go to x channel
 StageMover.moveZAbsolute(.5); // Set microscope Z position
