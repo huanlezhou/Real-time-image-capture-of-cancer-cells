@@ -1,7 +1,7 @@
 	private void getZStack(File filePath, double zoom_range, double z_increment, 
 			double zcorrect0, double zcorrect1, double zcorrect2, double zcorrect3,
 			double zcorrect4, double zcorrect5, double exp0, double exp1, double exp2, 
-      double exp3, double exp4, double exp5) { 
+      			double exp3, double exp4, double exp5) { 
 
 		//importClass(Packages.icy.type.collection.array.Array1DUtil)
 		//importClass(Packages.icy.image.IcyBufferedImageUtil)
@@ -434,79 +434,42 @@ String channel_state_str = "0";
 					// TODO Auto-generated catch block
 
 					e1.printStackTrace();
-
 				}
-
 			try {
-
 				StageMover.moveZAbsolute(current_z + z_increment);
-
 			} catch (Exception e) {
-
 				// TODO Auto-generated catch block
-
 				e.printStackTrace();
-
 			}
-
 			}
 
 		////////////////////End Z-stack Acquisition Loops/////////////////////////////////////////////
-
-
-
 		// Store the image# files (multiple channels used to hold z-slices) in the sequence. 
-
 		sequence0.setImage(0, 0, image0);
-
 		sequence0.setImage(0, 1, image1);
-
 		sequence0.setImage(0, 2, image2);
-
 		sequence0.setImage(0, 3, image3);
-
 		sequence0.setImage(0, 4, image4);
-
 		sequence0.setImage(0, 5, image5);
 
-
-
 		double x_position = 0.0;
-
 		try {
-
 			x_position = StageMover.getX();
-
 		} catch (Exception e) {
-
 			// TODO Auto-generated catch block
-
-			e.printStackTrace();
-
+			e.printStackTrace():
 		}
 
 		double y_position = 0.0;
-
 		try {
-
 			y_position = StageMover.getY();
-
 		} catch (Exception e) {
-
 			// TODO Auto-generated catch block
-
 			e.printStackTrace();
-
 		}
 
 		// Write out the sequence containing the z-stacks in the user specified directory.
-
-
-
 		//Check the correction of adding "File " before "file = new..."
-
 		File file = new File(filePath + "x"+ x_position + "y" + y_position+".tiff");
-
 		Saver.save(sequence0, file);
-
 		}
