@@ -5,7 +5,7 @@ importClass(Packages.icy.sequence.Sequence)
 importClass(Packages.icy.sequence.SequenceUtil)
 
 
-////////////////////////////////////////////////
+//////////////////VERSION NO.1 //////////////////////////////
 
 Sequence result = new Sequence(); // Create the resulting sequence
 
@@ -29,6 +29,30 @@ MicroManager.getCore().setProerty("ZeissReflectorTurret","State","x") // go to x
 StageMover.moveZRelative(.5); // Move again
 result.addImage(x,x,MicroManager.snapImage); // Then Snap again
 addSequence(result); // Finally, show the resulting sequence into Icy
+
+//file path
+filePath = "C:/Documents and Settings/asi/Desktop/Team4_Capstone/ThreeChannelImages"
+       file = new File(filePath + "/Imagex.tif")
+       Saver.save(result, file)
+       
+
+///////////////////VERSION NO.2  [Created ana array] /////////////////////////////
+
+Sequence = new Sequence(); // Create the resulting sequence
+
+//set exposure
+for(t = 0; t < 20; t++)
+{
+ MicroManager.setExposure(10 + (t * 5)) 
+
+   for(i = 0; i < 3; i++)
+
+MicroManager.getCore().setProerty("ZeissReflectorTurret","State","i") // go to x channel
+StageMover.moveZAbsolute(5); // Set microscope Z position
+image = MicroManager.snapImage() // acquire 1 image
+sequence.setImage(0, x, image) // set it in resulting sequence at position 0
+
+}}
 
 //file path
 filePath = "C:/Documents and Settings/asi/Desktop/Team4_Capstone/ThreeChannelImages"
