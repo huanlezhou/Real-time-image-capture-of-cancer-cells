@@ -1,8 +1,8 @@
-rivate void getZStack(File filePath, double zoom_range, double z_increment, 
+private void getZStack(File filePath, double zoom_range, double z_increment, 
 			double zcorrect0, double zcorrect1, double zcorrect2, double zcorrect3,
 			double zcorrect4, double zcorrect5, double exp0, double exp1, double exp2, 
       			double exp3, double exp4, double exp5) { 
-
+	
 		//importClass(Packages.icy.type.collection.array.Array1DUtil)
 		//importClass(Packages.icy.image.IcyBufferedImageUtil)
 		//importClass(Packages.icy.sequence.Sequence)
@@ -11,6 +11,7 @@ rivate void getZStack(File filePath, double zoom_range, double z_increment,
 		//importClass(Packages.icy.file.Saver)
 		//importClass(Packages.java.io.File)
 		//importClass(Packages.java.util.concurrent.TimeUnit)
+	
 		double exp = 500.0;
 		double initial_z_position = 0.0;
 		try {
@@ -24,9 +25,7 @@ rivate void getZStack(File filePath, double zoom_range, double z_increment,
 								// It must be an integer because it is used as an index.
 		Sequence sequence0 =  new Sequence();
 		// Get the current reflector turret (channel) state. 
-
-String channel_state_str = "0";
-
+		String channel_state_str = "0";
 		try {
 			channel_state_str = MicroManager.getCore().getProperty("ZeissReflectorTurret", "State");
 		} catch (Exception e) {
@@ -51,8 +50,6 @@ String channel_state_str = "0";
 		else if (channel_state_char=='5') {
 			channel_state = 5;}
 
-			
-
 		try {
 			TimeUnit.MILLISECONDS.sleep(delay_interval);
 		} catch (InterruptedException e) {
@@ -68,7 +65,6 @@ String channel_state_str = "0";
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 			channel_state = 0; }
 		try {
 			TimeUnit.MILLISECONDS.sleep(delay_interval);
@@ -76,25 +72,20 @@ String channel_state_str = "0";
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 		try {
 			StageMover.moveZAbsolute(initial_z_position-zoom_range);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-
-
 		IcyBufferedImage image = null;
-
 		try {
 			image = MicroManager.snapImage();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    
+		
 		IcyBufferedImage image0 = image;
 		IcyBufferedImage image1 = image;
 		IcyBufferedImage image2 = image;
@@ -117,46 +108,42 @@ String channel_state_str = "0";
 				// Need to correct z_positions to reflect different focuses of different channels.
 				if (channel_state==0){
 					z_correction = zcorrect0;
-          exp = exp0; }
+					exp = exp0; }
 				else if (channel_state==1){
 					z_correction = zcorrect1;
-          exp = exp1; }
+					exp = exp1; }
 				else if (channel_state==2){
 					z_correction = zcorrect2;
-          exp = exp2; }
+					exp = exp2; }
 				else if (channel_state==3){
 					z_correction = zcorrect3;
-          exp = exp3; }
+					exp = exp3; }
 				else if (channel_state==4){
 					z_correction = zcorrect4;
-          exp = exp4; }
+					exp = exp4; }
 				else if (channel_state==5){
 					z_correction = zcorrect5;
-          exp = exp5; }
-
+					exp = exp5; }
+				
 				double current_z = 0.0;
-
 				try {
 					current_z = StageMover.getZ();
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-
 				try {
 					StageMover.moveZAbsolute(current_z+z_correction);
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-        
-        try {
-          MicroManager.setExposure(exp);
-          } catch (Exception e1) {
-          // TODO Auto-generated catch block
-          e1.printStackTrace();
-          }
-
+				try {
+					MicroManager.setExposure(exp);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				//println("Channel State: "+channel_state+"    Zoom = "+current_zoom+"    Zoom degree:"+zoom_degree+"    Corrected Z-position:   "+(current_z+z_correction)+"\n");
 				// Snap the image and wait for the HW to get the job done.
 				try {
@@ -165,274 +152,140 @@ String channel_state_str = "0";
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-
 				try {
 					TimeUnit.MILLISECONDS.sleep(delay_interval);
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-
-
-
 				// Code for saving/manipulating images begins here
-
 				if ((zoom_degree==0)&&(channel_state==0)){
-
 				// Create a single image the first time a z-slice is taken under channel 0
-
 				//IcyBufferedImage image0 = image;
-
 				image0 = image;}
-
 				else if ((zoom_degree==0)&&(channel_state==1)){
-
 				// Create a single image the first time a z-slice is taken under channel 1
-
 				//IcyBufferedImage image1 = image;
-
 				image1 = image;}
-
 				else if ((zoom_degree==0)&&(channel_state==2)){
-
 				// Create a single image the first time a z-slice is taken under channel 2
-
 				//IcyBufferedImage image2 = image;
-
 				image2 = image;}
-
 				else if ((zoom_degree==0)&&(channel_state==3)){
-
 				//IcyBufferedImage image3 = image;
-
 				image3 = image;}
-
 				else if ((zoom_degree==0)&&(channel_state==4)){
-
 				//IcyBufferedImage image4 = image;
-
 				image4 = image;}
-
 				else if ((zoom_degree==0)&&(channel_state==5)){
-
 				//IcyBufferedImage image5 = image;
-
 				image5 = image;}
-
-				
-
 				// If the zoom_degree doesn't equal 0, that is, the first z-slice has already been acquired, then these else-if branches
-
 				// are taken.
-
 				else if ((!(zoom_degree==0))&&(channel_state==0)){
-
 					// Add a blank channel image to image0 and return the result named as image0 
-
 					image0 = IcyBufferedImageUtil.addChannel(image0);
-
 					// Begin an update on image0, is used to avoid image refresh & recalculations which slow down program execution
-
 					image0.beginUpdate();
-
 					// Create an array (matrix) with a copy of the pixel data of the image snapped on line 49
-
 					dataArray = image.getDataCopyXY(0);
-
 					// Convert that data to type double (floating point) values.
-
 					doubleDataArray = Array1DUtil.arrayToDoubleArray(dataArray, image.isSignedDataType());
-
 					// Convert the doubleDataArray to the data type format of the original image and store the result in the corresponding channel
-
 					// frame of image0.
-
 					Array1DUtil.doubleArrayToSafeArray(doubleDataArray, image0.getDataXY(zoom_degree), image0.isSignedDataType());
-
 					// End the update on image0. Causes recalculations and refresh events a single time.
-
 					image0.endUpdate();
-
 					}
-
 				else if ((!(zoom_degree==0))&&(channel_state==1)){
-
 					image1 = IcyBufferedImageUtil.addChannel(image1);
-
 					image1.beginUpdate();
-
 					dataArray = image.getDataCopyXY(0);
-
 					doubleDataArray = Array1DUtil.arrayToDoubleArray(dataArray, image.isSignedDataType());
-
 					Array1DUtil.doubleArrayToSafeArray(doubleDataArray, image1.getDataXY(zoom_degree), image1.isSignedDataType());
-
 					image1.endUpdate();
-
 					}
-
 				else if ((!(zoom_degree==0))&&(channel_state==2)){
-
 					image2 = IcyBufferedImageUtil.addChannel(image2);
-
 					image2.beginUpdate();
-
 					dataArray = image.getDataCopyXY(0);
-
 					doubleDataArray = Array1DUtil.arrayToDoubleArray(dataArray, image.isSignedDataType());
-
 					Array1DUtil.doubleArrayToSafeArray(doubleDataArray, image2.getDataXY(zoom_degree), image2.isSignedDataType());
-
 					image2.endUpdate();
-
 					}
-
 				else if ((!(zoom_degree==0))&&(channel_state==3)){
-
 					image3 = IcyBufferedImageUtil.addChannel(image3);
-
 					image3.beginUpdate();
-
 					dataArray = image.getDataCopyXY(0);
-
 					doubleDataArray = Array1DUtil.arrayToDoubleArray(dataArray, image.isSignedDataType());
-
 					Array1DUtil.doubleArrayToSafeArray(doubleDataArray, image3.getDataXY(zoom_degree), image3.isSignedDataType());
-
 					image3.endUpdate();
-
 					}
-
 				else if ((!(zoom_degree==0))&&(channel_state==4)){
-
 					image4 = IcyBufferedImageUtil.addChannel(image4);
-
 					image4.beginUpdate();
-
 					dataArray = image.getDataCopyXY(0);
-
 					doubleDataArray = Array1DUtil.arrayToDoubleArray(dataArray, image.isSignedDataType());
-
 					Array1DUtil.doubleArrayToSafeArray(doubleDataArray, image4.getDataXY(zoom_degree), image4.isSignedDataType());
-
 					image4.endUpdate();
-
 					}
-
 				else if ((!(zoom_degree==0))&&(channel_state==5)){
-
 					image5 = IcyBufferedImageUtil.addChannel(image5);
-
 					image5.beginUpdate();
-
 					dataArray = image.getDataCopyXY(0);
-
 					doubleDataArray = Array1DUtil.arrayToDoubleArray(dataArray, image.isSignedDataType());
-
 					Array1DUtil.doubleArrayToSafeArray(doubleDataArray, image5.getDataXY(zoom_degree), image5.isSignedDataType());
-
 					image5.endUpdate();
-
 					}
-
 			
-
 			// If the channel_state is not in the greatest valued position (5), increment it.
-
 			if (channel_state < 5) {
-
 				//This if branch alleviates the issue of the channel_state becoming a variable of type string and returning "01" instead of integer 1.
-
 				//This was an issue in the past. Possibly because line 30 set the channel state with "0" instead of 0. A string versus an integer.
-
 				if ((channel_state < 0)||(channel_state > 5)){
-
 					channel_state = 1;}
-
 				channel_state = channel_state + 1; // Do NOT replace with "channel_state += 1". Causes errors, likely due to variable type casting
-
 				try {
-
 					MicroManager.getCore().setProperty("ZeissReflectorTurret", "State", channel_state);
-
 				} catch (Exception e) {
-
 					// TODO Auto-generated catch block
-
 					e.printStackTrace();
-
 				}
-
 				try {
-
 					TimeUnit.MILLISECONDS.sleep(delay_interval);
-
 				} catch (InterruptedException e) {
-
 					// TODO Auto-generated catch block
-
 					e.printStackTrace();
-
-				}
-
-				}
-
+				} }
 			// If the channel_state is NOT less than 5, e.g. it is 5, set it to 0.
-
 			else {
-
 				channel_state = 0;
-
 				try {
-
 					MicroManager.getCore().setProperty("ZeissReflectorTurret", "State", channel_state);
-
 				} catch (Exception e) {
-
 					// TODO Auto-generated catch block
-
 					e.printStackTrace();
-
 				}
 
 				try {
 
 					TimeUnit.MILLISECONDS.sleep(delay_interval);
-
 				} catch (InterruptedException e) {
-
 					// TODO Auto-generated catch block
-
 					e.printStackTrace();
-
-				}
-
-				}
-
+				} }
 			try {
-
 				StageMover.moveZAbsolute(current_z);
-
 			} catch (Exception e) {
-
 				// TODO Auto-generated catch block
-
 				e.printStackTrace();
-
 			}
-
 			} while (channel_state != 0);
-
 				double current_z = 0.0;
-
 				try {
-
 					current_z = StageMover.getZ();
-
 				} catch (Exception e1) {
-
 					// TODO Auto-generated catch block
-
 					e1.printStackTrace();
 				}
 			try {
@@ -440,8 +293,7 @@ String channel_state_str = "0";
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			}
+			} }
 
 		////////////////////End Z-stack Acquisition Loops/////////////////////////////////////////////
 		// Store the image# files (multiple channels used to hold z-slices) in the sequence. 
@@ -467,7 +319,6 @@ String channel_state_str = "0";
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 		// Write out the sequence containing the z-stacks in the user specified directory.
 		//Check the correction of adding "File " before "file = new..."
 		File file = new File(filePath + "x"+ x_position + "y" + y_position+".tiff");
