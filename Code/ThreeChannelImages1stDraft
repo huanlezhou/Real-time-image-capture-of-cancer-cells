@@ -1,62 +1,43 @@
-importClass(Packages.plugins.tprovoost.Microscopy.MicroManager.MicroManager)
-importClass(Packages.plugins.tprovoost.Microscopy.MicroManager.tools.StageMover)
-importClass(Packages.icy.image.IcyBufferedImage)
-importClass(Packages.icy.sequence.Sequence)
-importClass(Packages.icy.sequence.SequenceUtil)
+///////////////////////////////////
+public void threeplugin(File filePath, double exp_DIC, double exp_Nuc, double exp_Cancer,
+			  double zcorrection_DIC, double zcorrection_Nuc, double zcorrection_Cancer) 
+	{
+ 
+		Sequence = new Sequence();
+		
+		initial_z_position = StageMover.getZ();
+		x_position = StageMover.getX();
+		y_position = StageMover.getY();
+		
+		// DIC
+		MicroManager.setExposure(exp_DIC);
+		//go to DIC channel (0)
+		MicroManager.getCore().setProerty("ZeissReflectorTurret", "State", 0); 
+		//Correct Z position to reflect different focuses/offsets for different channels/filters.
+		StageMover.moveZAbsolute(initial_z_position + zcorrection_DIC);
+		//Acquire 1 image
+		image = MicroManager.snapImage();
+		//Set image in sequence at (0,0) coordinate
+		sequence.setImage(0, 0, image);
+		
+		//Nuclear
+		MicroManager.setExposure(exp_Nuc); 
+		MicroManager.getCore().setProerty("ZeissReflectorTurret", "State", 1);
+		StageMover.moveZAbsolute(initial_z_position + zcorrection_Nuc);
+		image = MicroManager.snapImage();
+		sequence.setImage(0, 1, image);
+		
+		//Cancer Cell
+		MicroManager.setExposure(exp_Cancer); 
+		MicroManager.getCore().setProerty("ZeissReflectorTurret", "State", 2);
+		StageMover.moveZAbsolute(initial_z_position + zcorrection_Cancer);
+		image = MicroManager.snapImage();
+		sequence.setImage(0, 2, image);
+		//Return to initial uncorrected z position
+		StageMover.moveZAbsolute(initial_z_position);
 
+		filePath = "C:/Documents and Settings/asi/Desktop/Team4_Capstone/ThreeChannelImages";
+		       file = new File(filePath + "x" + x_position + "y" + y_position + ".tiff");
+		       Saver.save(Sequence, file);
 
-//////////////////VERSION NO.1 //////////////////////////////
-
-Sequence result = new Sequence(); // Create the resulting sequence
-
-//set exposure
-for(t = 0; t < 20; t++)
-{
- MicroManager.setExposure(10 + (t * 5)) 
- }
-// DIC
-MicroManager.getCore().setProerty("ZeissReflectorTurret","State","x") // go to x channel
-StageMover.moveZAbsolute(.5); // Set microscope Z position
-result.addImage(x,x,MicroManager.snapImage()); // Snap an image and add it to result
-
-//Nuclear
-MicroManager.getCore().setProerty("ZeissReflectorTurret","State","x") // go to x channel
-StageMover.moveZRelative(.5); // Move the microscope by 0.5 μm in Z
-result.addImage(x,x,MicroManager.snapImage); // Snap again
-
-//Cancer Cell
-MicroManager.getCore().setProerty("ZeissReflectorTurret","State","x") // go to x channel
-StageMover.moveZRelative(.5); // Move again
-result.addImage(x,x,MicroManager.snapImage); // Then Snap again
-addSequence(result); // Finally, show the resulting sequence into Icy
-
-//file path
-filePath = "C:/Documents and Settings/asi/Desktop/Team4_Capstone/ThreeChannelImages"
-       file = new File(filePath + "/Imagex.tif")
-       Saver.save(result, file)
-       
-
-///////////////////VERSION NO.2  [Created ana array] /////////////////////////////
-
-Sequence = new Sequence(); // Create the resulting sequence
-
-//set exposure
-for(t = 0; t < 20; t++)
-{
- MicroManager.setExposure(10 + (t * 5)) 
-
-   for(i = 0; i < 3; i++)
-
-MicroManager.getCore().setProerty("ZeissReflectorTurret","State","i") // go to x channel
-StageMover.moveZAbsolute(5); // Set microscope Z position
-image = MicroManager.snapImage() // acquire 1 image
-sequence.setImage(0, x, image) // set it in resulting sequence at position 0
-
-}}
-
-//file path
-filePath = "C:/Documents and Settings/asi/Desktop/Team4_Capstone/ThreeChannelImages"
-       file = new File(filePath + "/Imagex.tif")
-       Saver.save(result, file)
-
-////////////////////////////////////////////////
+}
