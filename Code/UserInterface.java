@@ -40,11 +40,11 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 	
 	// Initializes variable for the default channel focus offset and exposure times
 	final double CH1_OFFSET = -1, CH2_OFFSET = 0, CH3_OFFSET = 0, CH4_OFFSET = -0.5, CH5_OFFSET = -1, CH6_OFFSET = -1.5, NUMBER_OF_SLICES  = 10, SLICE_STEP_SIZE = 1;
-	final int CH1_EXP = 500, CH2_EXP = 500, CH3_EXP = 500, CH4_EXP = 500, CH5_EXP = 500, CH6_EXP = 500; 
+	final double CH1_EXP = 500, CH2_EXP = 500, CH3_EXP = 500, CH4_EXP = 500, CH5_EXP = 500, CH6_EXP = 500; 
 	
 	EzVarDouble signal_noise_ratio, ch1_offset, ch2_offset, ch3_offset, ch4_offset, ch5_offset, ch6_offset, number_of_slices, slice_step_size;
 
-	EzVarInteger ch1_exp, ch2_exp, ch3_exp, ch4_exp, ch5_exp, ch6_exp;
+	EzVarDouble ch1_exp, ch2_exp, ch3_exp, ch4_exp, ch5_exp, ch6_exp;
 	
 	EzVarText ch1_name, ch2_name, ch3_name, ch4_name, ch5_name, ch6_name;
 	
@@ -165,12 +165,12 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 		ch6_offset = new EzVarDouble("Ch6. Offset", CH6_OFFSET, -5, 5, 0.25);
 		
 		// Allows the user to enter modify the exposure time for different filters
-		ch1_exp = new EzVarInteger("Ch1. exposure time", CH1_EXP, 300, 500, 1);
-		ch2_exp = new EzVarInteger("Ch2. exposure time", CH2_EXP, 300, 500, 1);
-		ch3_exp = new EzVarInteger("Ch3. exposure time", CH3_EXP, 300, 500, 1);
-		ch4_exp = new EzVarInteger("Ch4. exposure time", CH4_EXP, 300, 500, 1);
-		ch5_exp = new EzVarInteger("Ch5. exposure time", CH5_EXP, 300, 500, 1);
-		ch6_exp = new EzVarInteger("Ch6. exposure time", CH6_EXP, 300, 500, 1);
+		ch1_exp = new EzVarDouble("Ch1. exposure time", CH1_EXP, 300, 500, 1);
+		ch2_exp = new EzVarDouble("Ch2. exposure time", CH2_EXP, 300, 500, 1);
+		ch3_exp = new EzVarDouble("Ch3. exposure time", CH3_EXP, 300, 500, 1);
+		ch4_exp = new EzVarDouble("Ch4. exposure time", CH4_EXP, 300, 500, 1);
+		ch5_exp = new EzVarDouble("Ch5. exposure time", CH5_EXP, 300, 500, 1);
+		ch6_exp = new EzVarDouble("Ch6. exposure time", CH6_EXP, 300, 500, 1);
 		
 				
 		// Creates a boolean expression for showing and hiding additional configuration options
@@ -262,63 +262,75 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 			true_captured_right_x = temp_captured_right_x;
 		}
 		
+		/*
+		
 		// Determines if the currently displayed sample contains cancerous cells.
 		int[] cellSize = {10, 1000};
 		int Cancer_channel = 2;
 		int Nucleus_channel = 3;
 		
 		Sequence data = new Sequence();
-		
+		*/
 		do {
 			
-			data = getActiveSequence();
-			
-			if (data == null)
-			{
-				MessageDialog.showDialog("There are no active sequence. \nPlease choose a sequence to open first");	
-				File file = FileDialog.open();
-				if(file == null)
+			do {
+				
+
+				/*
+				data = getActiveSequence();
+				
+				if (data == null)
 				{
-					MessageDialog.showDialog("User cancelled!");
-					return;
+					MessageDialog.showDialog("There are no active sequence. \nPlease choose a sequence to open first");	
+					File file = FileDialog.open();
+					if(file == null)
+					{
+						MessageDialog.showDialog("User cancelled!");
+						return;
+						
+					}
 					
+					String path = file.getAbsolutePath();
+					data = Loader.loadSequence(path, 0, false);
 				}
 				
-				String path = file.getAbsolutePath();
-				data = Loader.loadSequence(path, 0, false);
-			}
+				CellDetector detector = new CellDetector(true_signal_noise_ratio, cellSize);
+				
+				detector.DetectCell(data, Cancer_channel, Nucleus_channel);
+				addSequence(detector.cancer);
+				addSequence(detector.nucleus);
+				
+				if(detector.getDetectedActiveCells() != 0)
+				{
+					//getZStack(save_location, stack_depth, true_slice_step_size, true_ch1_offset, true_ch2_offset, true_ch3_offset, true_ch4_offset, true_ch5_offset, true_ch6_offset);
+				}
+		*/
+				// determines if the end of the sample has been reached
+				
+				//AcquireZStack zstack_object = new AcquireZStack();
+				//System.out.println(signal_noise_ratio);
+				
+				try {
+					x_location = StageMover.getX();
+					StageMover.moveXYRelative(-900, 0);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} while (x_location >= captured_right_x);
 			
-			CellDetector detector = new CellDetector(true_signal_noise_ratio, cellSize);
-			
-			detector.DetectCell(data, Cancer_channel, Nucleus_channel);
-			addSequence(detector.cancer);
-			addSequence(detector.nucleus);
-			
-			if(detector.getDetectedActiveCells() != 0)
-			{
-				//getZStack(save_location, stack_depth, true_slice_step_size, true_ch1_offset, true_ch2_offset, true_ch3_offset, true_ch4_offset, true_ch5_offset, true_ch6_offset);
-			}
-	
-			// determines if the end of the sample has been reached
-			try {
-				x_location = StageMover.getX();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			try {
 				y_location = StageMover.getY();
+				StageMover.moveXYRelative(0, 900);
+				StageMover.moveXYAbsolute(true_captured_left_x, StageMover.getY());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			next_location(x_limit(x_location, true_captured_right_x), y_limit(y_location, captured_bottom_y), x_location, y_location, true_captured_left_x, captured_bottom_y);
 			
-			//AcquireZStack zstack_object = new AcquireZStack();
-			System.out.println(signal_noise_ratio);
-		} while (x_location >= captured_right_x && y_location <= captured_bottom_y);
+		} while (y_location <= captured_bottom_y);
 		
-		
+		JOptionPane.showMessageDialog(null, "The end of the slide has been reached."); 	
 	}
 	
 	@Override
@@ -333,7 +345,7 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 		// TODO Auto-generated by Icy4Eclipse
 		MessageDialog.showDialog("User Interface is working fine !");
 	}
-*/
+
 	public boolean x_limit(double x_location, double true_captured_right_x) {
 		if (x_location >= true_captured_right_x)
 			return false;
@@ -347,27 +359,8 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 		else
 			return true;
 	}
+	*/
 	
-	private void next_location(boolean x_limit, boolean y_limit, double x_location, double y_locatoin, double true_captured_left_x, double captured_bottom_y) {
-		if (x_limit == true)
-			if (y_limit == true)
-				JOptionPane.showMessageDialog(null, "The end of the slide has been reached.");
-			else
-				try {
-					StageMover.moveXYRelative(-(true_captured_left_x - x_location), 5000);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		else
-			try {
-				StageMover.moveXYRelative(5000, 0);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		return;
-	}
 	private void getZStack(File filePath, double zoom_range, double z_increment, 
 			double zcorrect0, double zcorrect1, double zcorrect2, double zcorrect3,
 			double zcorrect4, double zcorrect5) { 
