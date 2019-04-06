@@ -4,7 +4,8 @@ OHSU-Waterfront campus, Robertson Life Sciences Building (RLSB), 4th floor, (4N0
 # Sponsor Representative Contact Information
 Dr. Thomas,
 
-Cell: 503-418-9343
+Lab: 503-418-9343
+Cell: 503-206-9429
 
 Email: thomas@cytoimagedx.com
 
