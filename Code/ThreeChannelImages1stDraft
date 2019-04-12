@@ -1,43 +1,72 @@
 ///////////////////////////////////
-public void threeplugin(File filePath, double exp_DIC, double exp_Nuc, double exp_Cancer,
-			  double zcorrection_DIC, double zcorrection_Nuc, double zcorrection_Cancer) 
-	{
- 
-		Sequence = new Sequence();
-		
-		initial_z_position = StageMover.getZ();
-		x_position = StageMover.getX();
-		y_position = StageMover.getY();
-		
-		// DIC
-		MicroManager.setExposure(exp_DIC);
-		//go to DIC channel (0)
-		MicroManager.getCore().setProerty("ZeissReflectorTurret", "State", 0); 
-		//Correct Z position to reflect different focuses/offsets for different channels/filters.
-		StageMover.moveZAbsolute(initial_z_position + zcorrection_DIC);
-		//Acquire 1 image
-		image = MicroManager.snapImage();
-		//Set image in sequence at (0,0) coordinate
-		sequence.setImage(0, 0, image);
-		
-		//Nuclear
-		MicroManager.setExposure(exp_Nuc); 
-		MicroManager.getCore().setProerty("ZeissReflectorTurret", "State", 1);
-		StageMover.moveZAbsolute(initial_z_position + zcorrection_Nuc);
-		image = MicroManager.snapImage();
-		sequence.setImage(0, 1, image);
-		
-		//Cancer Cell
-		MicroManager.setExposure(exp_Cancer); 
-		MicroManager.getCore().setProerty("ZeissReflectorTurret", "State", 2);
-		StageMover.moveZAbsolute(initial_z_position + zcorrection_Cancer);
-		image = MicroManager.snapImage();
-		sequence.setImage(0, 2, image);
-		//Return to initial uncorrected z position
-		StageMover.moveZAbsolute(initial_z_position);
+package plugins.user.threeplugin;
 
-		filePath = "C:/Documents and Settings/asi/Desktop/Team4_Capstone/ThreeChannelImages";
-		       file = new File(filePath + "x" + x_position + "y" + y_position + ".tiff");
-		       Saver.save(Sequence, file);
+import icy.gui.dialog.MessageDialog;
+import icy.plugin.abstract_.PluginActionable;
+import java.util.concurrent.TimeUnit;
+import java.io.File;
+import java.lang.String;
+import icy.gui.dialog.MessageDialog;
+import icy.plugin.abstract_.PluginActionable;
+import plugins.tprovoost.Microscopy.MicroManager.MicroManager;
+import plugins.tprovoost.Microscopy.MicroManager.tools.StageMover;
+import java.util.concurrent.TimeUnit;
+import java.io.File;
+import icy.file.Saver;
+import icy.image.IcyBufferedImageUtil;
+import icy.sequence.Sequence;
+import icy.type.collection.array.Array1DUtil;
+import java.lang.String;
+import icy.image.IcyBufferedImage;
+
+//@Updated ThreeChannelImages 
+
+///////////////////////////////////
+public class ThreePlugin extends PluginActionable{
+	@override
+	public void threeplugin(File filePath, double exp_DIC, double exp_Nuc, double exp_Cancer,
+	double zcorrection_DIC, double zcorrection_Nuc, double zcorrection_Cancer) 
+	{
+
+	//create a new sequence so
+	Sequence = new Sequence();
+
+	initial_zPosition = StageMover.getZ();
+	xPosition = StageMover.getX();
+	yPosition = StageMover.getY();
+
+	//DIC
+	MicroManager.setExposure(exp_DIC);
+	//go to DIC channel (0)
+	MicroManager.getCore().setProerty("ZeissReflectorTurret", "State", 0); 
+	//Correct Z position to reflect different focuses/offsets for different channels/filters.
+	StageMover.moveZAbsolute(initial_zPosition + zcorrection_DIC);
+	//Acquire 1 image
+	image = MicroManager.snapImage();
+	//Set image in sequence at (0,0) coordinate
+	sequence.setImage(0, 0, image);
+
+	//Nuclear
+	MicroManager.setExposure(exp_Nuc); 
+	MicroManager.getCore().setProerty("ZeissReflectorTurret", "State", 1);
+	StageMover.moveZAbsolute(initial_z_position + zcorrection_Nuc);
+	image = MicroManager.snapImage();
+	sequence.setImage(0, 1, image);
+
+	//Cancer Cell
+	MicroManager.setExposure(exp_Cancer); 
+	MicroManager.getCore().setProerty("ZeissReflectorTurret", "State", 2);
+	StageMover.moveZAbsolute(initial_zPosition + zcorrection_Cancer);
+	image = MicroManager.snapImage();
+	sequence.setImage(0, 2, image);
+	//Return to initial uncorrected z position
+	StageMover.moveZAbsolute(initial_zPosition);
+
+	filePath = "C:/Documents and Settings/asi/Desktop/Team4_Capstone/ThreeChannelImages";
+	file = new File(filePath + "x" + xPosition + "y" + yPosition + ".tiff");
+	Saver.save(Sequence, file);
+
+	}
 
 }
+
