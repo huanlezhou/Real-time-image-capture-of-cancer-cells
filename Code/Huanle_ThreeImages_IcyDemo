@@ -1,0 +1,62 @@
+importClass(Packages.icy.type.collection.array.Array1DUtil)
+importClass(Packages.icy.image.IcyBufferedImage)
+importClass(Packages.icy.image.IcyBufferedImageUtil)
+importClass(Packages.plugins.tprovoost.scripteditor.uitools.filedialogs.FileDialog)
+importClass(Packages.icy.sequence.Sequence)
+importClass(Packages.plugins.tprovoost.Microscopy.MicroManager.MicroManager)
+importClass(Packages.plugins.tprovoost.Microscopy.MicroManager.tools.StageMover)
+importClass(Packages.icy.file.Saver)
+importClass(Packages.java.io.File)
+	
+	//Defining/setting variables for testing purposes.
+	exp_DIC = 100;
+	exp_Nuc = 100;
+	exp_Cancer = 100;
+	zcorrection_DIC = 0.5;
+	zcorrection_Nuc = 1;
+	zcorrection_Cancer = 0.5
+	channels = ["1-LP409 ", "2-DAPI ", "3-QD565 ", "4-QD585 ", "5-QD605 ", "6-QD655 "];
+	//create a new sequence
+	Sequence = new Sequence();
+	//DIC
+	zPosition = StageMover.getZ();
+	xPosition = StageMover.getX();
+	yPosition = StageMover.getY();
+	MicroManager.setExposure(exp_DIC);
+	//go to DIC channel (0)
+	MicroManager.setConfigForGroup("Turret Reflector", channels[0], true);
+	//MicroManager.getCore().setProperty("ZeissReflectorTurret", "State", 0); 
+	//Correct Z position to reflect different focuses/offsets for different channels/filters.
+	StageMover.moveZRelative(zcorrection_DIC);
+	//Acquire 1 image
+	image = MicroManager.snapImage();
+	Sequence.setImage(0, 0, image);
+	StageMover.moveZAbsolute(zPosition);
+	//Nuclear
+	MicroManager.setExposure(exp_Nuc); 
+	MicroManager.setConfigForGroup("Turret Reflector", channels[1], true);
+	//MicroManager.getCore().setProperty("ZeissReflectorTurret", "State", 1);
+	StageMover.moveZRelative(zcorrection_Nuc);
+	image_Nuc= MicroManager.snapImage();
+	Sequence.setImage(1, 0, image_Nuc);
+
+	StageMover.moveZAbsolute(zPosition);
+	
+    
+	//Cancer Cell
+	MicroManager.setExposure(exp_Cancer); 
+	MicroManager.setConfigForGroup("Turret Reflector", channels[2], true);
+	//MicroManager.getCore().setProperty("ZeissReflectorTurret", "State", 2);
+	StageMover.moveZRelative(zcorrection_Cancer);
+	image_can = MicroManager.snapImage();
+	Sequence.setImage(2, 0, image_can);
+
+	//Return to initial uncorrected z position
+	StageMover.moveZAbsolute(zPosition);
+
+	filePath = "C:/Documents and Settings/asi/Desktop/Three/ThreeImageStack";
+	file = new File(filePath + "x" + xPosition + "y" + yPosition + "z" + zPosition + ".tiff");
+        Sequence.setImage(0, 0, image)
+        Saver.save(Sequence, file, false);
+        gui.addSequence(Sequence);
+
