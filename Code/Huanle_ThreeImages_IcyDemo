@@ -58,5 +58,5 @@ importClass(Packages.java.io.File)
 	file = new File(filePath + "x" + xPosition + "y" + yPosition + "z" + zPosition + ".tiff");
         Sequence.setImage(0, 0, image)
         Saver.save(Sequence, file, false);
-        gui.addSequence(Sequence);
+        //gui.addSequence(Sequence);
 
