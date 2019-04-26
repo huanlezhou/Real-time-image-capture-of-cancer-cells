@@ -173,9 +173,11 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 		EzGroup SNR = new EzGroup("Threshold Intensity", signal_noise_ins, signal_noise_ratio);
 		addEzComponent(SNR);
 		
+		/*
 		EzLabel objective_field_ins = new EzLabel("Please enter the Field Number, located on the object.");
 		EzGroup FV = new EzGroup("Field View Number", objective_field_ins, objective_field);
 		addEzComponent(FV);
+		*/
 		
 		// Creates and adds the offsets and stack options as their own group in the GUI
 		EzGroup additional_focus = new EzGroup("Focus Offset", ch1_offset, ch2_offset, ch3_offset, ch4_offset, ch5_offset, ch6_offset);
@@ -185,9 +187,7 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 		
 		// Creates and adds the offsets and stack options as their own group in the GUI
 		EzGroup additional_stack = new EzGroup("Stack Size", number_of_slices, slice_step_size);
-		
 		EzGroup additional_filters  = new EzGroup("Filter Locations in Filter Wheel", DIC, Cancer, Nucleus);
-		
 		
 		// Adds the button to capture the stage height to the focus
 		EzGroup Focus = new EzGroup("Z Focus", new EzLabel("Adjust the focus until the sample is in focus, \nthen click the focus button "), Z_focus);
@@ -205,8 +205,8 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 		EzGroup user_directory = new EzGroup("Directory Selection", new EzLabel("Click the Directory button, \nto select where you would like to save your images."), directory);
 		super.addEzComponent(user_directory);
 		
-		EzGroup Advanced_options = new EzGroup("Advanced Options", advanced_focus, advanced_exposure, advanced_stack, advanced_filter,
-				additional_filters, additional_focus, additional_exposure, additional_stack);
+		EzGroup Advanced_options = new EzGroup("Advanced Options", new EzLabel("Please have only one box checked at a time."),
+				advanced_focus, advanced_exposure, advanced_stack, advanced_filter, additional_filters, additional_focus, additional_exposure, additional_stack);
 		super.addEzComponent(Advanced_options);
 		
 		// Hide slice and offset options under a box for advanced options
@@ -225,13 +225,16 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 	
 	@Override
 	protected void execute() {
+		stopFlag = false;
 		
-		double true_ch1_offset, true_ch2_offset, true_ch3_offset, true_ch4_offset, true_ch5_offset, true_ch6_offset, 
+		double true_ch1_exposure, true_ch2_exposure, true_ch3_exposure, true_ch4_exposure, true_ch5_exposure, true_ch6_exposure,
+		true_ch1_offset, true_ch2_offset, true_ch3_offset, true_ch4_offset, true_ch5_offset, true_ch6_offset, 
 		true_signal_noise_ratio, true_number_of_slices, true_slice_step_size, stack_depth, true_objective_field;
 		double temp_captured_right_x, temp_captured_left_x, true_captured_right_x, true_captured_left_x;
 		int true_dic;
 		int true_cancer, true_nucleus;
 		
+		while(!stopFlag) {	
 		// Following block of code retrieves the values entered into the GUI, for use by the rest of the system
 		true_ch1_offset = ch1_offset.getValue();
 		true_ch2_offset = ch2_offset.getValue();
@@ -239,6 +242,12 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 		true_ch4_offset = ch4_offset.getValue();
 		true_ch5_offset = ch5_offset.getValue();
 		true_ch6_offset = ch6_offset.getValue();
+		true_ch1_exposure = ch1_exp.getValue();
+		true_ch2_exposure = ch2_exp.getValue();
+		true_ch3_exposure = ch3_exp.getValue();
+		true_ch4_exposure = ch4_exp.getValue();
+		true_ch5_exposure = ch5_exp.getValue();
+		true_ch6_exposure = ch6_exp.getValue();
 		true_signal_noise_ratio = signal_noise_ratio.getValue();
 		true_objective_field = objective_field.getValue();
 		true_number_of_slices = number_of_slices.getValue();
@@ -249,6 +258,8 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 		true_nucleus = Nucleus.getValue() - 1;
 		
 		int filter[] = {true_dic, true_cancer, true_nucleus};
+		double offset[] = {true_ch1_offset, true_ch2_offset, true_ch3_offset, true_ch4_offset, true_ch5_offset, true_ch6_offset};
+		double exposure[] = {true_ch1_exposure, true_ch2_exposure, true_ch3_exposure, true_ch4_exposure, true_ch5_exposure, true_ch6_exposure};
 		/*
 		System.out.println("The left most x position is " + captured_left_x);
 		System.out.println("The right most x position is " + captured_right_x);
@@ -257,10 +268,10 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 		System.out.println("The focus level is " + captured_z_focus);
 		System.out.println("Your save directory is " + save_location);
 		System.out.println(signal_noise_ratio);
-		*/
 		System.out.println(filter[0]);
 		System.out.println(filter[1]);
 		System.out.println(filter[2]);
+		*/
 		
 		// Confirms that the sample locations are assigned to the correct min and max locations
 		temp_captured_right_x = captured_right_x;
@@ -276,23 +287,28 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 			true_captured_right_x = temp_captured_right_x;
 		}
 		
-		/*
+		try {
+			StageMover.moveXYAbsolute(true_captured_left_x, captured_top_y);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 		
 		// Determines if the currently displayed sample contains cancerous cells.
-		int[] cellSize = {10, 1000};
+		//int[] cellSize = {10, 1000};
 		int Cancer_channel = 2;
 		int Nucleus_channel = 3;
 		
 		Sequence data = new Sequence();
-		*/
-		while(!stopFlag) {
 			
 			do {
 				
 				do {
 					
 
-					/*
+					
 					data = getActiveSequence();
 					
 					if (data == null)
@@ -318,17 +334,12 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 					
 					if(detector.getDetectedActiveCells() != 0)
 					{
-						//getZStack(save_location, stack_depth, true_slice_step_size, true_ch1_offset, true_ch2_offset, true_ch3_offset, true_ch4_offset, true_ch5_offset, true_ch6_offset);
+						getZStack(save_location, stack_depth, true_slice_step_size, true_ch1_offset, true_ch2_offset, true_ch3_offset, true_ch4_offset, true_ch5_offset, true_ch6_offset);
 					}
-			*/
-					// determines if the end of the sample has been reached
-					
-					//AcquireZStack zstack_object = new AcquireZStack();
-					//System.out.println(signal_noise_ratio);
 					
 					try {
 						x_location = StageMover.getX();
-						StageMover.moveXYRelative(-900, 0);
+						StageMover.moveXYRelative(-1000, 0);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -337,14 +348,14 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 				
 				try {
 					y_location = StageMover.getY();
-					StageMover.moveXYRelative(0, 900);
+					StageMover.moveXYRelative(0, 1000);
 					StageMover.moveXYAbsolute(true_captured_left_x, StageMover.getY());
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
-			} while (y_location <= captured_bottom_y);
+			} while (y_location <= (captured_bottom_y - 1000));
 			
 			JOptionPane.showMessageDialog(null, "The end of the slide has been reached.");
 			stopFlag = true;
@@ -681,6 +692,8 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 		File file = new File(filePath + "x"+ x_position + "y" + y_position+".tiff");
 		Saver.save(sequence0, file);
 		}
+	
+	
 	
 
 public void start() {
