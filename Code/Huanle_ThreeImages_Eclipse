@@ -1,66 +1,47 @@
 package plugins.huanle.ThreePlugin;
-import icy.gui.dialog.MessageDialog;
 import icy.plugin.abstract_.PluginActionable;
-import icy.type.collection.array.Array1DUtil;
 import icy.image.IcyBufferedImage;
-import icy.image.IcyBufferedImageUtil;
 import icy.sequence.Sequence;
 import plugins.tprovoost.Microscopy.MicroManager.MicroManager;
 import plugins.tprovoost.Microscopy.MicroManager.tools.StageMover;
 import icy.file.Saver;
 import java.io.File;
 			
-public abstract class Three extends PluginActionable{
-public static void main(String args[] ) {
-	// Prompt user for the values that go into this function
-	 try {
-		threeplugin(50,50,50,0.5,0.5,0.5,0,0,0);
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+
+
+public abstract class ThreePlugin extends PluginActionable{	
+	public static void main(String[] args) throws Throwable {
+		threeplugin(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, null);
 	}
-}
+	private static void threeplugin(double exp_DIC, double exp_Nuc, double exp_Cancer,
+			  double zcorrection_DIC, double zcorrection_Nuc, double zcorrection_Cancer, 
+			  int zPosition, IcyBufferedImage image) throws Throwable  {
+	    Sequence yoyo = new Sequence();
+	
+		MicroManager.setExposure(exp_DIC);
+		MicroManager.getCore().setProperty("ZeissReflectorTurret", "channel", 0);
+		StageMover.moveZRelative(zPosition + zcorrection_DIC);
+        image = MicroManager.snapImage();
+	    yoyo.setImage(0, 0, image);
+	
 
-private static void threeplugin(double exp_DIC, double exp_Nuc, double exp_Cancer,
-		  double zcorrection_DIC, double zcorrection_Nuc, double zcorrection_Cancer, 
-		  double zPosition, double xPosition, double yPosition)  {
-	// TODO Auto-generated method stub
+		MicroManager.setExposure(exp_Nuc);
+		MicroManager.getCore().setProperty("ZeissReflectorTurret", "channel", 1);
+		StageMover.moveZRelative(zPosition + zcorrection_Nuc);
+		image = MicroManager.snapImage();
+	    yoyo.setImage(0, 1, image);
+	
 
-	Sequence sequence = new Sequence();
-	
-	zPosition = StageMover.getZ();
-	xPosition = StageMover.getX();
-	yPosition = StageMover.getY();
-	
-	// DIC
-	MicroManager.setExposure(exp_DIC);
-	//go to DIC channel (0)
-	MicroManager.getCore().setProperty("ZeissReflectorTurret", "State", 0); 
-	//Correct Z position to reflect different focuses/offsets for different channels/filters.
-	StageMover.moveZAbsolute(zPosition + zcorrection_DIC);
-	//Acquire 1 image
-	IcyBufferedImage image = MicroManager.snapImage();
-	//Set image in sequence at (0,0) coordinate
-	sequence.setImage(0, 0, image);
-	
-	//Nuclear
-	MicroManager.setExposure(exp_Nuc); 
-	MicroManager.getCore().setProperty("ZeissReflectorTurret", "State", 1);
-	StageMover.moveZAbsolute(zPosition + zcorrection_Nuc);
-	image = MicroManager.snapImage();
-	sequence.setImage(0, 1, image);
-	
-	//Cancer Cell
-	MicroManager.setExposure(exp_Cancer); 
-	MicroManager.getCore().setProperty("ZeissReflectorTurret", "State", 2);
-	StageMover.moveZAbsolute(zPosition + zcorrection_Cancer);
-	image = MicroManager.snapImage();
-	sequence.setImage(0, 2, image);
-	//Return to initial uncorrected z position
-	StageMover.moveZAbsolute(zPosition);
+		MicroManager.setExposure(exp_Cancer);
+		MicroManager.getCore().setProperty("ZeissReflectorTurret", "channel", 2);
+		StageMover.moveZAbsolute(zPosition + zcorrection_Cancer);
+		image = MicroManager.snapImage();
+	    yoyo.setImage(0, 2, image);
 
-	filePath = "C:/Documents and Settings/asi/Desktop/Team4_Capstone/ThreeChannelImages";
-	       File file = new File(filePath + "x" + xPosition + "y" + yPosition + ".tiff");
-	       Saver.save(sequence, file);
+		StageMover.moveZAbsolute(zPosition);
+
+	    String filePath = "C:/Documents and Settings/asi/Desktop/Team4_Capstone/ThreeChannelImages";
+	    File file = new File(filePath + "ThreeImage" +".tiff");
+	    Saver.save(yoyo, file);
 }
 }
