@@ -3,18 +3,11 @@ package plugins.ashten2.userinterface;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.concurrent.TimeUnit;
-
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import icy.file.Loader;
-import icy.file.Saver;
-import icy.gui.dialog.MessageDialog;
-import icy.image.IcyBufferedImage;
-import icy.image.IcyBufferedImageUtil;
 import icy.sequence.Sequence;
-import icy.type.collection.array.Array1DUtil;
+import jxl.read.biff.BiffException;
 import plugins.adufour.ezplug.EzButton;
 import plugins.adufour.ezplug.EzGroup;
 import plugins.adufour.ezplug.EzLabel;
@@ -24,12 +17,10 @@ import plugins.adufour.ezplug.EzVarBoolean;
 import plugins.adufour.ezplug.EzVarDouble;
 import plugins.adufour.ezplug.EzVarInteger;
 import plugins.adufour.ezplug.EzVarText;
-import plugins.alfredangeline.ActiveCellDetector.CellDetector;
+import plugins.alfredangeline.activecelldetector.CellDetector;
+import plugins.alfredangeline.activecelldetector.ImageAcquisition;
 import plugins.tkkoba1997.getallzstacks.GetAllZStacks;
-import plugins.tprovoost.Microscopy.MicroManager.MicroManager;
 import plugins.tprovoost.Microscopy.MicroManager.tools.StageMover;
-import plugins.tprovoost.Microscopy.MicroManagerForIcy.MicroscopePlugin;
-import plugins.tprovoost.scripteditor.uitools.filedialogs.FileDialog;
 
 
 public class Microscopy2 extends EzPlug implements EzStoppable {
@@ -72,7 +63,7 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 				captured_top_y = StageMover.getY();
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Error occured when top left button pressed line 66");
 			}
 		}
 	};
@@ -87,7 +78,7 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 				captured_bottom_y = StageMover.getY();
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Error occured when bottom right buttom pressed line 81");
 			}
 		}
 	};
@@ -101,7 +92,7 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 				captured_z_focus = StageMover.getZ();
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Error occured when focus button pressed line 95");
 			}
 		}
 	};
@@ -118,7 +109,7 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 				save_location = fc.getSelectedFile();
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Error occured when directory button was pressed line 112");
 			}
 		}
 	};
@@ -228,7 +219,7 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 		stopFlag = false;
 		
 		double true_ch1_offset, true_ch2_offset, true_ch3_offset, true_ch4_offset, true_ch5_offset, true_ch6_offset, 
-		true_signal_noise_ratio, true_number_of_slices, true_slice_step_size, stack_depth, true_objective_field;
+		true_signal_noise_ratio, true_number_of_slices, true_slice_step_size, stack_depth; //true_objective_field;
 		double temp_captured_right_x, temp_captured_left_x, true_captured_right_x, true_captured_left_x;
 		int true_dic, true_cancer, true_nucleus;
 		int true_ch1_exposure, true_ch2_exposure, true_ch3_exposure, true_ch4_exposure, true_ch5_exposure, true_ch6_exposure;
@@ -248,7 +239,7 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 		true_ch5_exposure = ch5_exp.getValue();
 		true_ch6_exposure = ch6_exp.getValue();
 		true_signal_noise_ratio = signal_noise_ratio.getValue();
-		true_objective_field = objective_field.getValue();
+		//true_objective_field = objective_field.getValue();
 		true_number_of_slices = number_of_slices.getValue();
 		true_slice_step_size = slice_step_size.getValue();
 		stack_depth = true_number_of_slices * true_slice_step_size;
@@ -259,6 +250,7 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 		int filter[] = {true_dic, true_cancer, true_nucleus};
 		double offset[] = {true_ch1_offset, true_ch2_offset, true_ch3_offset, true_ch4_offset, true_ch5_offset, true_ch6_offset};
 		int exposure[] = {true_ch1_exposure, true_ch2_exposure, true_ch3_exposure, true_ch4_exposure, true_ch5_exposure, true_ch6_exposure};
+		double exposure2[] = {true_ch1_exposure, true_ch2_exposure, true_ch3_exposure, true_ch4_exposure, true_ch5_exposure, true_ch6_exposure};
 		/*
 		System.out.println("The left most x position is " + captured_left_x);
 		System.out.println("The right most x position is " + captured_right_x);
@@ -290,55 +282,43 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 			StageMover.moveXYAbsolute(true_captured_left_x, captured_top_y);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Error occured when trying to move the stage to the initial sample position line 285");
 		}
 		
-		
-		
-		// Determines if the currently displayed sample contains cancerous cells.
-		int[] cellSize = {10, 1000};
-		int Cancer_channel = 2;
-		int Nucleus_channel = 3;
-		
 		Sequence data = new Sequence();
+		ImageAcquisition imageAcquisition = new ImageAcquisition(exposure2, offset);
+		CellDetector detector = new CellDetector(true_signal_noise_ratio, save_location);
 			
 			do {
 				
 				do {
-					data = getActiveSequence();
-					
-					if (data == null)
-					{
-						MessageDialog.showDialog("There are no active sequence. \nPlease choose a sequence to open first");	
-						File file = FileDialog.open();
-						if(file == null)
-						{
-							MessageDialog.showDialog("User cancelled!");
-							return;
-						}
-						
-						String path = file.getAbsolutePath();
-						data = Loader.loadSequence(path, 0, false);
+					try {
+						data = imageAcquisition.acquireSequence(filter, captured_z_focus, save_location);
+					} catch(Exception e) {
+						JOptionPane.showMessageDialog(null, "Error when trying to acquire test images line 298");
 					}
+						try {
+							detector.DetectCell(data);
+						} catch (BiffException e1) {
+							// TODO Auto-generated catch block
+							JOptionPane.showMessageDialog(null, "Error occcured when trying to check for active cells line 304");
+						}
 					
-					CellDetector detector = new CellDetector(true_signal_noise_ratio, cellSize);
-					
-					detector.DetectCell(data, Cancer_channel, Nucleus_channel);
-					addSequence(detector.cancer);
-					addSequence(detector.nucleus);
-					
+					try {
 					if(detector.getDetectedActiveCells() != 0)
 					{
 						GetAllZStacks All_Stacks = new GetAllZStacks();
 						All_Stacks.getZStacks(save_location, stack_depth, true_slice_step_size, offset, exposure);
 					}
-					
+					} catch(Exception e) {
+						JOptionPane.showMessageDialog(null, "Error occured when trying to acquire the z-stack line 314");
+					}
 					try {
 						x_location = StageMover.getX();
 						StageMover.moveXYRelative(-1000, 0);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						JOptionPane.showMessageDialog(null, "Error occured when trying to reposition the stage x-location line 321");
 					}
 				} while (x_location >= true_captured_right_x);
 				
@@ -348,7 +328,7 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 					StageMover.moveXYAbsolute(true_captured_left_x, StageMover.getY());
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Error occured when trying to reposition the stage after the farthest x location has been reached line 331");
 				}
 				
 			} while (y_location <= (captured_bottom_y - 1000));
