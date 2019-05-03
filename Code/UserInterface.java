@@ -263,7 +263,15 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 		System.out.println(filter[1]);
 		System.out.println(filter[2]);
 		*/
-		
+		String z_directory = save_location.getAbsolutePath().concat("Tested Positive");
+		File temp_z_d = new File(z_directory);
+		temp_z_d.mkdir();
+		File stack_directory = new File(z_directory);
+		String test_directory = save_location.getAbsolutePath().concat("Single Test Image");
+		File temp_test_d = new File(test_directory);
+		temp_test_d.mkdir();
+		File test_image_directory = new File(test_directory);
+
 		// Confirms that the sample locations are assigned to the correct min and max locations
 		temp_captured_right_x = captured_right_x;
 		temp_captured_left_x = captured_left_x;
@@ -287,13 +295,13 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 		
 		Sequence data = new Sequence();
 		ImageAcquisition imageAcquisition = new ImageAcquisition(exposure2, offset);
-		CellDetector detector = new CellDetector(true_signal_noise_ratio, save_location);
+		CellDetector detector = new CellDetector(true_signal_noise_ratio, test_image_directory);
 			
 			do {
 				
 				do {
 					try {
-						data = imageAcquisition.acquireSequence(filter, captured_z_focus, save_location);
+						data = imageAcquisition.acquireSequence(filter, captured_z_focus, test_image_directory);
 					} catch(Exception e) {
 						JOptionPane.showMessageDialog(null, "Error when trying to acquire test images line 298");
 					}
@@ -308,7 +316,7 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 					if(detector.getDetectedActiveCells() != 0)
 					{
 						GetAllZStacks All_Stacks = new GetAllZStacks();
-						All_Stacks.getZStacks(save_location, stack_depth, true_slice_step_size, offset, exposure);
+						All_Stacks.getZStacks(stack_directory, stack_depth, true_slice_step_size, offset, exposure);
 					}
 					} catch(Exception e) {
 						JOptionPane.showMessageDialog(null, "Error occured when trying to acquire the z-stack line 314");
