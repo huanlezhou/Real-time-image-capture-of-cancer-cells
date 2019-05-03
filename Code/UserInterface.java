@@ -32,8 +32,8 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 	double captured_left_x, captured_right_x, captured_top_y, captured_bottom_y, captured_z_focus, z_depth;
 	
 	// Initializes variable for the default channel focus offset and exposure times
-	final double CH1_OFFSET = -1, CH2_OFFSET = 0, CH3_OFFSET = 0, CH4_OFFSET = -0.5, CH5_OFFSET = -1, CH6_OFFSET = -1.5, NUMBER_OF_SLICES  = 10, SLICE_STEP_SIZE = 1;
-	final int CH1_EXP = 500, CH2_EXP = 500, CH3_EXP = 500, CH4_EXP = 500, CH5_EXP = 500, CH6_EXP = 500; 
+	final double CH1_OFFSET = -1, CH2_OFFSET = 0, CH3_OFFSET = 0, CH4_OFFSET = -0.5, CH5_OFFSET = -1, CH6_OFFSET = -1.5, NUMBER_OF_SLICES  = 3, SLICE_STEP_SIZE = 1;
+	final int CH1_EXP = 300, CH2_EXP = 500, CH3_EXP = 400, CH4_EXP = 400, CH5_EXP = 400, CH6_EXP = 400; 
 	
 	EzVarDouble signal_noise_ratio, objective_field, ch1_offset, ch2_offset, ch3_offset, ch4_offset, ch5_offset, ch6_offset, number_of_slices, slice_step_size;
 
@@ -263,11 +263,12 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 		System.out.println(filter[1]);
 		System.out.println(filter[2]);
 		*/
-		String z_directory = save_location.getAbsolutePath().concat("/Tested Positive");
+		String temp_directory = save_location.getName();
+		String z_directory = temp_directory.concat("/Tested Positive");
 		File temp_z_d = new File(z_directory);
 		temp_z_d.mkdir();
 		File stack_directory = new File(z_directory);
-		String test_directory = save_location.getAbsolutePath().concat("/Single Test Image");
+		String test_directory = temp_directory.concat("/Single Test Image");
 		File temp_test_d = new File(test_directory);
 		temp_test_d.mkdir();
 		File test_image_directory = new File(test_directory);
@@ -346,6 +347,8 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 		}
 		 	
 	}
+	
+	
 	
 	@Override
 	public void clean() {
