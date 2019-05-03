@@ -263,11 +263,11 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 		System.out.println(filter[1]);
 		System.out.println(filter[2]);
 		*/
-		String z_directory = save_location.getAbsolutePath().concat("Tested Positive");
+		String z_directory = save_location.getAbsolutePath().concat("/Tested Positive");
 		File temp_z_d = new File(z_directory);
 		temp_z_d.mkdir();
 		File stack_directory = new File(z_directory);
-		String test_directory = save_location.getAbsolutePath().concat("Single Test Image");
+		String test_directory = save_location.getAbsolutePath().concat("/Single Test Image");
 		File temp_test_d = new File(test_directory);
 		temp_test_d.mkdir();
 		File test_image_directory = new File(test_directory);
