@@ -3,6 +3,7 @@ package plugins.ashten2.userinterface;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -17,8 +18,8 @@ import plugins.adufour.ezplug.EzVarBoolean;
 import plugins.adufour.ezplug.EzVarDouble;
 import plugins.adufour.ezplug.EzVarInteger;
 import plugins.adufour.ezplug.EzVarText;
+import plugins.alfredangeline.ImageAcquisition.ImageAcquisition;
 import plugins.alfredangeline.activecelldetector.CellDetector;
-import plugins.alfredangeline.activecelldetector.ImageAcquisition;
 import plugins.tkkoba1997.getallzstacks.GetAllZStacks;
 import plugins.tprovoost.Microscopy.MicroManager.tools.StageMover;
 
@@ -224,7 +225,7 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 		int true_dic, true_cancer, true_nucleus;
 		int true_ch1_exposure, true_ch2_exposure, true_ch3_exposure, true_ch4_exposure, true_ch5_exposure, true_ch6_exposure;
 		
-		while(!stopFlag) {	
+		//while(!stopFlag) {	
 		// Following block of code retrieves the values entered into the GUI, for use by the rest of the system
 		true_ch1_offset = ch1_offset.getValue();
 		true_ch2_offset = ch2_offset.getValue();
@@ -263,12 +264,12 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 		System.out.println(filter[1]);
 		System.out.println(filter[2]);
 		*/
-		String temp_directory = save_location.getName();
-		String z_directory = temp_directory.concat("/Tested Positive");
+		String temp_directory = save_location.getPath();
+		String z_directory = temp_directory.concat("/Tested Positive/");
 		File temp_z_d = new File(z_directory);
 		temp_z_d.mkdir();
 		File stack_directory = new File(z_directory);
-		String test_directory = temp_directory.concat("/Single Test Image");
+		String test_directory = temp_directory.concat("/Single Test Image/");
 		File temp_test_d = new File(test_directory);
 		temp_test_d.mkdir();
 		File test_image_directory = new File(test_directory);
@@ -296,11 +297,14 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 		
 		Sequence data = new Sequence();
 		ImageAcquisition imageAcquisition = new ImageAcquisition(exposure2, offset);
-		CellDetector detector = new CellDetector(true_signal_noise_ratio, test_image_directory);
+		CellDetector detector = new CellDetector(true_signal_noise_ratio, 2, 1, test_image_directory);
 			
 			do {
-				
+				if(stopFlag)
+					break;
 				do {
+					if(stopFlag)
+						break;
 					try {
 						data = imageAcquisition.acquireSequence(filter, captured_z_focus, test_image_directory);
 					} catch(Exception e) {
@@ -346,7 +350,7 @@ public class Microscopy2 extends EzPlug implements EzStoppable {
 			stopFlag = true;
 		}
 		 	
-	}
+	//}
 	
 	
 	
